@@ -22,6 +22,7 @@ const Login: FC = () => {
               {...field}
               isInvalid={!!errors[field.name]}
               errorMessage={errors[field.name]?.message}
+              onKeyDown={(e) => e.key === 'Enter' && login()}
               label="Please enter your username"
               placeholder="John Doe"
               aria-label="Username input"

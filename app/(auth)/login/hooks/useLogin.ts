@@ -3,7 +3,7 @@ import { fetchApi } from '@utils/fetch/fetch';
 import { maliciousInputValidator } from '@utils/validators/maliciousInputValidator';
 import { LoginReq } from 'app/api/utils/types/auth/LoginReq';
 import { useRouter } from 'next/navigation';
-import { useCallback, useTransition } from 'react';
+import { useTransition } from 'react';
 import { Control, FieldErrors, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -28,23 +28,21 @@ export const useLogin = (): UseLogin => {
   const router = useRouter();
   const [isLoading, startTransition] = useTransition();
 
-  const { control, formState, watch } = useForm<FormSchema>({
+  const { control, formState, handleSubmit } = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     mode: 'onTouched',
     reValidateMode: 'onChange',
   });
   const { errors, isValid } = formState;
-  const values = watch();
 
-  const login = useCallback(
-    () =>
-      startTransition(() =>
-        fetchApi<null, LoginReq>('/api/auth/login', {
-          method: 'POST',
-          body: { user: values.user },
-        }).then(() => router.push('/'))
-      ),
-    [values, router]
+  const login = handleSubmit(({ user }: FormSchema) =>
+    startTransition(() =>
+      fetchApi<null, LoginReq>('/api/auth/login', {
+        method: 'POST',
+        body: { user },
+        successToast: `Welcome ${user}!`,
+      }).then(() => router.push('/'))
+    )
   );
 
   return { control, errors, isLoading, isValid, login };

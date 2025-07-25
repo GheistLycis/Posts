@@ -9,7 +9,7 @@ type GlobalErrorProps = Readonly<{
 
 const GlobalError: FC<GlobalErrorProps> = ({ reset }) => (
   <html lang="pt-BR">
-    <body style={{ fontFamily: 'Roboto, sans-serif' }}>
+    <body style={{ fontFamily: 'Roboto, sans-serif', minHeight: '100svh' }}>
       <div
         style={{
           display: 'flex',

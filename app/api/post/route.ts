@@ -2,6 +2,7 @@ import { handleBffException } from 'app/api/utils/functions/handleBffException';
 import { Handler } from 'app/api/utils/types/api/Handler';
 import { NextResponse } from 'next/server';
 import { handleFailedRequest } from '../utils/functions/handleFailedRequest';
+import { CreatePostRes } from '../utils/types/post/CreatePostRes';
 import { ListPostRes } from '../utils/types/post/ListPostRes';
 
 const API_URL = process.env.API_URL;
@@ -23,7 +24,7 @@ export const GET: Handler<ListPostRes> = async (req) => {
   }
 };
 
-export const POST: Handler = async (req) => {
+export const POST: Handler<CreatePostRes> = async (req) => {
   try {
     const body = await req.json();
     const res = await fetch(`${API_URL}/`, {
