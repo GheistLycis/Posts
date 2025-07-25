@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint", // Eslint
+    "github.vscode-github-actions", // Github Actions
+    "esbenp.prettier-vscode", // Prettier
+    "bradlc.vscode-tailwindcss", // Tailwind Intellisense
+    "SonarSource.sonarlint-vscode", // Sonar Source
+    "yoavbls.pretty-ts-errors", // Pretty ts errors
+  ],
+}
