@@ -2,7 +2,7 @@ import SessionProvider from '@contexts/SessionContext/Provider/ContextProvider';
 import { FC, ReactNode } from 'react';
 
 const AppLayout: FC<{ children: ReactNode }> = ({ children }) => (
-  <div className="relative h-svh pt-16">
+  <div className="flex h-svh justify-center">
     <SessionProvider>{children}</SessionProvider>
   </div>
 );
