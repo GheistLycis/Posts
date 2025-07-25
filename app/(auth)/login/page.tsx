@@ -9,8 +9,8 @@ const Login: FC = () => {
 
   return (
     <main>
-      <div className="bg-background flex min-w-[500px] flex-col gap-2 rounded-2xl border border-[#CCC] p-4">
-        <h2 className="mb-2 text-[22px] font-bold">
+      <div className="bg-background flex w-[280px] flex-col gap-2 rounded-2xl border border-[#CCC] p-4 md:w-[500px]">
+        <h2 className="mb-2 font-bold md:text-[22px]">
           Welcome to CodeLeap network!
         </h2>
 
@@ -28,7 +28,10 @@ const Login: FC = () => {
               labelPlacement="outside"
               variant="bordered"
               size="sm"
-              classNames={{ input: 'placeholder-[#CCC]!', label: 'text-base' }}
+              classNames={{
+                input: 'placeholder-[#CCC]!',
+                label: 'text-sm md:text-base',
+              }}
             />
           )}
         />

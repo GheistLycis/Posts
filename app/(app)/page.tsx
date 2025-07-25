@@ -1,11 +1,17 @@
-'use client';
 import { FC } from 'react';
-import { useHome } from './hooks/useHome';
+import NewPost from './components/NewPost/NewPost';
+import PostList from './components/PostList/PostList';
 
-const Home: FC = () => {
-  const {} = useHome();
+const Home: FC = () => (
+  <main className="bg-background flex h-svh flex-col items-center gap-4 pt-10">
+    <div className="bg-primary fixed top-0 h-20 w-full content-center pl-6 font-bold text-white md:text-[22px]">
+      CodeLeap Network
+    </div>
 
-  return <main className="flex flex-col items-center"></main>;
-};
+    <NewPost />
+
+    <PostList />
+  </main>
+);
 
 export default Home;
