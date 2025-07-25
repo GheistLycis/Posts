@@ -1,0 +1,17 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Count lines changed",
+      "type": "shell",
+      "command": "git diff --shortstat",
+      "problemMatcher": []
+    },
+    {
+      "label": "Count staged lines changed",
+      "type": "shell",
+      "command": "git diff --cached --shortstat",
+      "problemMatcher": []
+    }
+  ]
+}
