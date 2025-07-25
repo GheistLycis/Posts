@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { ApiError } from '../types/Api/BffErrorPayload';
-import { LogSeverity } from '../types/Api/LogSeverity';
+import { ApiError } from '../types/api/BffErrorPayload';
+import { LogSeverity } from '../types/api/LogSeverity';
 import { logServerException } from './observability/logServerException';
 
 const HTTP_STATUS_TO_LOG: Record<number, LogSeverity> = {

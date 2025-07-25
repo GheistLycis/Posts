@@ -1,4 +1,4 @@
-import { LogSeverity } from '../../types/Api/LogSeverity';
+import { LogSeverity } from '../../types/api/LogSeverity';
 
 // TODO: implement vendor
 export const logServerException = (

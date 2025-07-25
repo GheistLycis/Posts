@@ -1,5 +1,5 @@
 import { handleBffException } from 'app/api/utils/functions/handleBffException';
-import { Handler } from 'app/api/utils/types/Api/Handler';
+import { Handler } from 'app/api/utils/types/api/Handler';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 

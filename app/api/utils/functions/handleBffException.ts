@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { BffError } from '../types/Api/BffErrorPayload';
+import { BffError } from '../types/api/BffErrorPayload';
 import { logBffException } from './observability/logBffException';
 
 export const handleBffException = (

@@ -9,25 +9,11 @@ type GlobalErrorProps = Readonly<{
 
 const GlobalError: FC<GlobalErrorProps> = ({ reset }) => (
   <html lang="pt-BR">
-    <head>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossOrigin="anonymous"
-      />
-      {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-      <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
-        rel="stylesheet"
-      />
-    </head>
-
-    <body style={{ fontFamily: 'Poppins, sans-serif' }}>
+    <body style={{ fontFamily: 'Roboto, sans-serif' }}>
       <div
         style={{
           display: 'flex',
-          height: '100vh',
+          maxHeight: '100svh',
           alignItems: 'center',
           justifyContent: 'center',
         }}
@@ -51,30 +37,30 @@ const GlobalError: FC<GlobalErrorProps> = ({ reset }) => (
                 fontWeight: 500,
               }}
             >
-              Ops! Parece que algo saiu do esperado
+              Oops! Seems like something&apos;s off
             </p>
             <p style={{ fontSize: '14px' }}>
-              Estamos enfrentando um problema técnico que já estamos resolvendo.{' '}
-              <br /> Pedimos desculpas pelo transtorno. Tente recarregar a
-              página ou acesse novamente em alguns minutos.
+              We&apos;re facing a technical problem on which we are already
+              working. <br /> We apologize for the inconvenience. Try reloading
+              the page now or return in a few minutes.
             </p>
           </div>
 
           <button
             onClick={reset}
             style={{
-              padding: '8px 16px',
+              padding: '8px 32px',
               backgroundColor: '#7695EC',
               fontSize: '16px',
-              fontWeight: 500,
+              fontWeight: 700,
               color: 'white',
               border: '0 solid transparent',
-              borderRadius: '12px',
+              borderRadius: '8px',
               cursor: 'pointer',
-              fontFamily: 'Poppins, sans-serif',
+              fontFamily: 'Roboto, sans-serif',
             }}
           >
-            Recarregar página
+            RELOAD PAGE
           </button>
         </div>
       </div>

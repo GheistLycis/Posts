@@ -1,5 +1,5 @@
 import { toast } from '@components/Toast/Toast';
-import { BffErrorPayload } from 'app/api/utils/types/Api/BffErrorPayload';
+import { BffErrorPayload } from 'app/api/utils/types/api/BffErrorPayload';
 import { handleErrorMessage } from './handleErrorMessage/handleErrorMessage';
 
 type Options<T> = {

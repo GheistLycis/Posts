@@ -1,5 +1,5 @@
 import { toast } from '@components/Toast/Toast';
-import { BffErrorPayload } from 'app/api/utils/types/Api/BffErrorPayload';
+import { BffErrorPayload } from 'app/api/utils/types/api/BffErrorPayload';
 
 const HTTP_STATUS_NOT_TO_POP_TOAST = [401, 403];
 
