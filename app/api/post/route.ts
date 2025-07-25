@@ -1,0 +1,42 @@
+import { handleBffException } from 'app/api/utils/functions/handleBffException';
+import { Handler } from 'app/api/utils/types/api/Handler';
+import { NextResponse } from 'next/server';
+import { handleFailedRequest } from '../utils/functions/handleFailedRequest';
+import { ListPostRes } from '../utils/types/post/ListPostRes';
+
+const API_URL = process.env.API_URL;
+const LOG_TAG = 'post';
+
+export const GET: Handler<ListPostRes> = async (req) => {
+  try {
+    const res = await fetch(`${API_URL}/`, {
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-cache',
+    });
+
+    if (!res.ok)
+      return await handleFailedRequest(res, `${req.method} - ${LOG_TAG}`);
+
+    return NextResponse.json(await res.json());
+  } catch (error) {
+    return handleBffException(error, `${req.method} - ${LOG_TAG}`);
+  }
+};
+
+export const POST: Handler = async (req) => {
+  try {
+    const body = await req.json();
+    const res = await fetch(`${API_URL}/`, {
+      method: req.method,
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    if (!res.ok)
+      return await handleFailedRequest(res, `${req.method} - ${LOG_TAG}`);
+
+    return NextResponse.json(await res.json());
+  } catch (error) {
+    return handleBffException(error, `${req.method} - ${LOG_TAG}`);
+  }
+};

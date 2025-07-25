@@ -3,7 +3,7 @@ import { Handler } from 'app/api/utils/types/api/Handler';
 import { LoginReq } from 'app/api/utils/types/auth/LoginReq';
 import { NextResponse } from 'next/server';
 
-const LOG_TAG = 'auth/magic-link/request';
+const LOG_TAG = 'auth/login';
 
 export const POST: Handler<null> = async (req) => {
   try {
