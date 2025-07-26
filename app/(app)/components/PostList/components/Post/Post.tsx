@@ -2,8 +2,10 @@
 import { Tooltip } from '@heroui/react';
 import { ListPostRes } from 'app/api/utils/types/post/ListPostRes';
 import { FC } from 'react';
+import { AiOutlineLike } from 'react-icons/ai';
 import { MdDeleteForever } from 'react-icons/md';
 import { PiNotePencil } from 'react-icons/pi';
+import styles from './Post.module.css';
 import { usePost } from './hooks/usePost';
 
 interface PostProps {
@@ -13,7 +15,7 @@ interface PostProps {
 }
 
 const Post: FC<PostProps> = ({ onDelete, onEdit, post }) => {
-  const { postAge, user } = usePost({ post });
+  const { postAge, userHasLiked, likes, toggleLike, user } = usePost({ post });
 
   return (
     <div className="border-gray flex w-full max-w-[752px] flex-col gap-2 rounded-2xl border">
@@ -49,7 +51,18 @@ const Post: FC<PostProps> = ({ onDelete, onEdit, post }) => {
         <div className="text-subtitle mb-2 flex justify-between gap-2 md:text-[18px]">
           <p className="max-w-[40ch] truncate">@{post.username}</p>
 
-          <p className="text-nowrap">{postAge}</p>
+          <div className="flex items-center gap-2 md:gap-3">
+            <div
+              onClick={toggleLike}
+              className={`flex cursor-pointer items-center gap-1 ${userHasLiked ? `${styles.animate} text-primary` : 'hover:text-primary duration-200'}`}
+            >
+              {likes}
+
+              <AiOutlineLike />
+            </div>
+
+            <p className="text-nowrap">{postAge}</p>
+          </div>
         </div>
 
         <div>{post.content}</div>

@@ -7,7 +7,7 @@ export const useSessionProvider = (): SessionContext => {
   const router = useRouter();
   const [userName, setUserName] = useState<string>();
   const value = useMemo<SessionContext>(
-    () => (userName ? { user: { name: userName } } : {}),
+    () => (userName ? { user: { name: userName, postsLiked: [] } } : {}),
     [userName]
   );
 

@@ -9,9 +9,6 @@ const MAX_CONTENT_LEN = 3000;
 const NewPost: FC = () => {
   const { control, errors, isLoading, isValid, submit } = useNewPost();
 
-  {
-    /* TODO: toggle-collapse + motion */
-  }
   return (
     <section className="border-gray flex w-full max-w-[752px] flex-col gap-4 rounded-2xl border p-4">
       <h2 className="font-bold md:text-[22px]">What&apos;s on your mind?</h2>

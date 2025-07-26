@@ -12,6 +12,7 @@ interface LoadedSession {
 
 interface User {
   name: string;
+  postsLiked: number[];
 }
 
 const SessionContext = createContext<SessionContext | undefined>(undefined);

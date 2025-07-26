@@ -1,6 +1,7 @@
 import { useSessionContext } from '@contexts/SessionContext/useSessionContext';
+import { fetchApi } from '@utils/fetch/fetch';
 import { ListPostRes } from 'app/api/utils/types/post/ListPostRes';
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 interface UsePostProps {
   post: ListPostRes['results'][number];
@@ -8,6 +9,9 @@ interface UsePostProps {
 
 interface UsePost {
   postAge: string;
+  toggleLike: () => void;
+  userHasLiked: boolean;
+  likes: number;
   user?: string;
 }
 
@@ -19,6 +23,26 @@ const YEAR = 365 * DAY;
 
 export const usePost = ({ post }: UsePostProps): UsePost => {
   const { user } = useSessionContext();
+
+  const [likes, setLikes] = useState(post.likes);
+  const [userHasLiked, setUserHasLiked] = useState(
+    user?.postsLiked.includes(post.id) ?? false
+  );
+
+  // TODO: useOptimistic?
+  const toggleLike = useCallback(() => {
+    const newUserHasLiked = !userHasLiked;
+
+    setLikes((v) => v + (newUserHasLiked ? 1 : -1));
+    setUserHasLiked(newUserHasLiked);
+    fetchApi<null>(`/api/post/${post.id}/like`, {
+      method: 'POST',
+      errorToast: 'Sorry, an unexpected error has ocurred',
+    }).catch(() => {
+      setLikes((v) => v + (!newUserHasLiked ? 1 : -1));
+      setUserHasLiked(!newUserHasLiked);
+    });
+  }, [post, userHasLiked]);
 
   const postAge = useMemo(() => {
     const age =
@@ -46,5 +70,5 @@ export const usePost = ({ post }: UsePostProps): UsePost => {
     return `${value} ${unit}${value !== 1 ? 's' : ''} ago`;
   }, [post]);
 
-  return { user: user?.name, postAge };
+  return { likes, userHasLiked, toggleLike, user: user?.name, postAge };
 };

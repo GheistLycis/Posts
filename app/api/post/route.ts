@@ -18,7 +18,13 @@ export const GET: Handler<ListPostRes> = async (req) => {
     if (!res.ok)
       return await handleFailedRequest(res, `${req.method} - ${LOG_TAG}`);
 
-    return NextResponse.json(await res.json());
+    const resPayload: ListPostRes = await res.json();
+
+    resPayload.results.forEach(
+      (post) => (post.likes = Math.floor(Math.random() * 10))
+    );
+
+    return NextResponse.json(resPayload);
   } catch (error) {
     return handleBffException(error, `${req.method} - ${LOG_TAG}`);
   }

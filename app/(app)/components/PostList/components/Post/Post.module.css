@@ -1,0 +1,15 @@
+.animate {
+  animation: pop .3s ease-out;
+}
+
+@keyframes pop {
+  10% {
+    transform: scale(.7);
+  }
+  60% {
+    transform: scale(1.4) rotate(-5deg);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

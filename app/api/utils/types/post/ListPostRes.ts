@@ -12,4 +12,5 @@ interface Post {
   created_datetime: string;
   title: string;
   content: string;
+  likes: number;
 }
