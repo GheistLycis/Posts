@@ -3,15 +3,13 @@ import { ListPostRes } from 'app/api/utils/types/post/ListPostRes';
 import { useCallback, useMemo } from 'react';
 
 interface UsePostProps {
-  confirmationModalRef: unknown;
-  editModalRef: unknown;
+  confirmationComponentRef: unknown;
   onUpdate: () => void;
   post: ListPostRes['results'][number];
 }
 
 interface UsePost {
   handleDelete: () => void;
-  handleEdit: () => void;
   postAge: string;
   user?: string;
 }
@@ -53,7 +51,5 @@ export const usePost = ({ post }: UsePostProps): UsePost => {
 
   const handleDelete = useCallback(() => {}, []);
 
-  const handleEdit = useCallback(() => {}, []);
-
-  return { handleDelete, handleEdit, user: user?.name, postAge };
+  return { handleDelete, user: user?.name, postAge };
 };

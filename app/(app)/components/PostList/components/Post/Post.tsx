@@ -1,27 +1,27 @@
 'use client';
 import { Tooltip } from '@heroui/react';
 import { ListPostRes } from 'app/api/utils/types/post/ListPostRes';
-import { FC } from 'react';
-import { FaRegEdit } from 'react-icons/fa';
+import { FC, RefObject } from 'react';
 import { MdDeleteForever } from 'react-icons/md';
+import { PiNotePencil } from 'react-icons/pi';
+import { EditModalHandle } from '../EditModal/EditModal';
 import { usePost } from './hooks/usePost';
 
 interface PostProps {
   onUpdate: () => void;
-  confirmationModalRef: unknown;
-  editModalRef: unknown;
+  confirmationComponentRef: unknown;
+  editComponentRef: RefObject<EditModalHandle | null>;
   post: ListPostRes['results'][number];
 }
 
 const Post: FC<PostProps> = ({
   onUpdate,
-  confirmationModalRef,
-  editModalRef,
+  confirmationComponentRef,
+  editComponentRef,
   post,
 }) => {
-  const { handleDelete, handleEdit, postAge, user } = usePost({
-    confirmationModalRef,
-    editModalRef,
+  const { handleDelete, postAge, user } = usePost({
+    confirmationComponentRef,
     onUpdate,
     post,
   });
@@ -37,18 +37,18 @@ const Post: FC<PostProps> = ({
 
         {user === post.username && (
           <div className="flex items-center gap-4 md:gap-6">
-            <Tooltip content="Edit post">
+            <Tooltip content="Delete post">
               <MdDeleteForever
-                size={30}
+                size={28}
                 onClick={handleDelete}
                 className="cursor-pointer duration-200 hover:opacity-50"
               />
             </Tooltip>
 
-            <Tooltip content="Delete post">
-              <FaRegEdit
-                size={26}
-                onClick={handleEdit}
+            <Tooltip content="Edit post">
+              <PiNotePencil
+                size={28}
+                onClick={() => editComponentRef.current?.open(post.id)}
                 className="cursor-pointer duration-200 hover:opacity-50"
               />
             </Tooltip>

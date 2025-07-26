@@ -2,10 +2,13 @@ import { useInfiniteScroll } from '@heroui/use-infinite-scroll';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchApi } from '@utils/fetch/fetch';
 import { ListPostRes } from 'app/api/utils/types/post/ListPostRes';
-import { RefObject, useEffect } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 import { postCreatedEvent } from '../../NewPost/hooks/useNewPost';
+import { EditModalHandle } from '../components/EditModal/EditModal';
+import { postEditedEvent } from '../components/EditModal/hooks/useEditModal';
 
 interface UsePostList {
+  editModalRef: RefObject<EditModalHandle | null>;
   hasNextPage: boolean;
   isLoading: boolean;
   loaderRef: RefObject<HTMLElement>;
@@ -17,6 +20,7 @@ interface UsePostList {
 const PAGE_SIZE = 5;
 
 export const usePostList = (): UsePostList => {
+  const editModalRef = useRef<EditModalHandle>(null);
   const { data, hasNextPage, isLoading, fetchNextPage, refetch } =
     useInfiniteQuery({
       queryFn: ({ pageParam }) =>
@@ -40,13 +44,24 @@ export const usePostList = (): UsePostList => {
   });
 
   useEffect(() => {
-    const onPostCreated = () => refetch();
+    const onPostsChange = () => refetch();
 
-    document.addEventListener(postCreatedEvent.type, onPostCreated);
+    document.addEventListener(postCreatedEvent.type, onPostsChange);
+    document.addEventListener(postEditedEvent.type, onPostsChange);
 
-    return () =>
-      document.removeEventListener(postCreatedEvent.type, onPostCreated);
+    return () => {
+      document.removeEventListener(postCreatedEvent.type, onPostsChange);
+      document.removeEventListener(postEditedEvent.type, onPostsChange);
+    };
   }, [refetch]);
 
-  return { hasNextPage, isLoading, loaderRef, posts, refetch, scrollerRef };
+  return {
+    editModalRef,
+    hasNextPage,
+    isLoading,
+    loaderRef,
+    posts,
+    refetch,
+    scrollerRef,
+  };
 };

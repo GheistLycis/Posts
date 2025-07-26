@@ -11,7 +11,7 @@ export default heroui({
         primary: '#7695EC',
 
         danger: '#FF5151',
-        success: '#40C057',
+        success: '#47B960',
         warning: '#FAB005',
 
         background: '#FFF',
