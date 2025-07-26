@@ -66,6 +66,7 @@ const EditModal: ForwardRefRenderFunction<EditModalHandle, EditModalProps> = (
                       {...field}
                       isInvalid={!!errors[field.name]}
                       errorMessage={errors[field.name]?.message}
+                      onKeyDown={(e) => e.key === 'Esc' && e.preventDefault()}
                       label="Title"
                       placeholder="Hello world"
                       aria-label="Post title input"
@@ -90,6 +91,7 @@ const EditModal: ForwardRefRenderFunction<EditModalHandle, EditModalProps> = (
                       {...field}
                       isInvalid={!!errors[field.name]}
                       errorMessage={errors[field.name]?.message}
+                      onKeyDown={(e) => e.key === 'Esc' && e.preventDefault()}
                       label="Content"
                       placeholder="Content here"
                       aria-label="Post content input"

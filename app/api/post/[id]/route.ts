@@ -21,7 +21,7 @@ export const GET: Handler<GetPostRes, 'id'> = async (req, ctx) => {
 
     const resPayload: GetPostRes = await res.json();
 
-    resPayload.comments = mockComments;
+    resPayload.comments = mockComments.toReversed();
 
     return NextResponse.json(resPayload);
   } catch (error) {
