@@ -29,16 +29,6 @@ const Post: FC<PostProps> = ({ post, onDelete, onEdit, onViewComments }) => {
         </Tooltip>
 
         <div className="flex items-center gap-3 md:gap-5">
-          <div className="flex gap-2">
-            {post.comments.length}
-
-            <FaRegComments
-              size={28}
-              onClick={onViewComments}
-              className="cursor-pointer duration-200 outline-none hover:opacity-50"
-            />
-          </div>
-
           {user === post.username && (
             <>
               <Tooltip content="Delete post">
@@ -63,9 +53,20 @@ const Post: FC<PostProps> = ({ post, onDelete, onEdit, onViewComments }) => {
 
       <div className="p-4">
         <div className="text-subtitle mb-2 flex justify-between gap-2 md:text-[18px]">
-          <p className="max-w-[40ch] truncate">@{post.username}</p>
+          <p className="max-w-[40ch] truncate">
+            @{post.username + (user === post.username ? ' (you)' : '')}
+          </p>
 
           <div className="flex items-center gap-2 md:gap-3">
+            <div
+              onClick={onViewComments}
+              className="hover:text-primary flex cursor-pointer items-center gap-1 duration-200"
+            >
+              {post.comments.length}
+
+              <FaRegComments />
+            </div>
+
             <div
               onClick={toggleLike}
               className={`flex cursor-pointer items-center gap-1 ${userHasLiked ? `${styles.animate} text-primary` : 'hover:text-primary duration-200'}`}
