@@ -1,15 +1,12 @@
 import { useSessionContext } from '@contexts/SessionContext/useSessionContext';
 import { ListPostRes } from 'app/api/utils/types/post/ListPostRes';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 
 interface UsePostProps {
-  confirmationComponentRef: unknown;
-  onUpdate: () => void;
   post: ListPostRes['results'][number];
 }
 
 interface UsePost {
-  handleDelete: () => void;
   postAge: string;
   user?: string;
 }
@@ -49,7 +46,5 @@ export const usePost = ({ post }: UsePostProps): UsePost => {
     return `${value} ${unit}${value !== 1 ? 's' : ''} ago`;
   }, [post]);
 
-  const handleDelete = useCallback(() => {}, []);
-
-  return { handleDelete, user: user?.name, postAge };
+  return { user: user?.name, postAge };
 };

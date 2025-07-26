@@ -1,4 +1,5 @@
 'use client';
+import ConfirmationModal from '@components/ConfirmationModal/ConfirmationModal';
 import { Spinner } from '@heroui/react';
 import { FC, RefObject } from 'react';
 import EditModal from './components/EditModal/EditModal';
@@ -7,8 +8,10 @@ import { usePostList } from './hooks/usePostList';
 
 const PostList: FC = () => {
   const {
+    confirmationModalRef,
     editModalRef,
     hasNextPage,
+    handleDelete,
     isLoading,
     loaderRef,
     posts,
@@ -18,7 +21,12 @@ const PostList: FC = () => {
 
   return (
     <>
-      <EditModal ref={editModalRef} />
+      <EditModal ref={editModalRef} onEdit={refetch} />
+
+      <ConfirmationModal
+        ref={confirmationModalRef}
+        onConfirm={handleDelete as never}
+      />
 
       <div className="flex flex-col gap-2">
         {!posts.length && !isLoading && (
@@ -34,9 +42,8 @@ const PostList: FC = () => {
           {posts.map((post) => (
             <Post
               key={post.id}
-              confirmationComponentRef={undefined}
-              editComponentRef={editModalRef}
-              onUpdate={refetch}
+              onDelete={(id) => confirmationModalRef.current?.open(id)}
+              onEdit={(id) => editModalRef.current?.open(id)}
               post={post}
             />
           ))}

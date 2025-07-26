@@ -42,7 +42,7 @@ export const PATCH: Handler<unknown, 'id'> = async (req, ctx) => {
   }
 };
 
-export const DELETE: Handler<unknown, 'id'> = async (req, ctx) => {
+export const DELETE: Handler<null, 'id'> = async (req, ctx) => {
   try {
     const { id } = await ctx.params;
     const res = await fetch(`${API_URL}/${id}/`, {
@@ -53,7 +53,7 @@ export const DELETE: Handler<unknown, 'id'> = async (req, ctx) => {
     if (!res.ok)
       return await handleFailedRequest(res, `${req.method} - ${LOG_TAG}`);
 
-    return NextResponse.json(await res.json());
+    return NextResponse.json(null);
   } catch (error) {
     return handleBffException(error, `${req.method} - ${LOG_TAG}`);
   }

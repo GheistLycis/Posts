@@ -1,30 +1,19 @@
 'use client';
 import { Tooltip } from '@heroui/react';
 import { ListPostRes } from 'app/api/utils/types/post/ListPostRes';
-import { FC, RefObject } from 'react';
+import { FC } from 'react';
 import { MdDeleteForever } from 'react-icons/md';
 import { PiNotePencil } from 'react-icons/pi';
-import { EditModalHandle } from '../EditModal/EditModal';
 import { usePost } from './hooks/usePost';
 
 interface PostProps {
-  onUpdate: () => void;
-  confirmationComponentRef: unknown;
-  editComponentRef: RefObject<EditModalHandle | null>;
+  onDelete: (id: number) => void;
+  onEdit: (id: number) => void;
   post: ListPostRes['results'][number];
 }
 
-const Post: FC<PostProps> = ({
-  onUpdate,
-  confirmationComponentRef,
-  editComponentRef,
-  post,
-}) => {
-  const { handleDelete, postAge, user } = usePost({
-    confirmationComponentRef,
-    onUpdate,
-    post,
-  });
+const Post: FC<PostProps> = ({ onDelete, onEdit, post }) => {
+  const { postAge, user } = usePost({ post });
 
   return (
     <div className="border-gray flex w-full max-w-[752px] flex-col gap-2 rounded-2xl border">
@@ -40,23 +29,22 @@ const Post: FC<PostProps> = ({
             <Tooltip content="Delete post">
               <MdDeleteForever
                 size={28}
-                onClick={handleDelete}
-                className="cursor-pointer duration-200 hover:opacity-50"
+                onClick={() => onDelete(post.id)}
+                className="cursor-pointer duration-200 outline-none hover:opacity-50"
               />
             </Tooltip>
 
             <Tooltip content="Edit post">
               <PiNotePencil
                 size={28}
-                onClick={() => editComponentRef.current?.open(post.id)}
-                className="cursor-pointer duration-200 hover:opacity-50"
+                onClick={() => onEdit(post.id)}
+                className="cursor-pointer duration-200 outline-none hover:opacity-50"
               />
             </Tooltip>
           </div>
         )}
       </div>
 
-      {/* TODO: toggle-collapse + motion */}
       <div className="p-4">
         <div className="text-subtitle mb-2 flex justify-between gap-2 md:text-[18px]">
           <p className="max-w-[40ch] truncate">@{post.username}</p>

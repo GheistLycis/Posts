@@ -14,6 +14,10 @@ import { ForwardRefRenderFunction, forwardRef } from 'react';
 import { Controller } from 'react-hook-form';
 import { useEditModal } from './hooks/useEditModal';
 
+export interface EditModalProps {
+  onEdit: () => void;
+}
+
 export interface EditModalHandle {
   open: (id: number) => void;
   close: () => void;
@@ -21,7 +25,10 @@ export interface EditModalHandle {
 
 const MAX_CONTENT_LEN = 3000;
 
-const EditModal: ForwardRefRenderFunction<EditModalHandle> = (_, ref) => {
+const EditModal: ForwardRefRenderFunction<EditModalHandle, EditModalProps> = (
+  { onEdit },
+  ref
+) => {
   const {
     isOpen,
     onClose,
@@ -32,7 +39,7 @@ const EditModal: ForwardRefRenderFunction<EditModalHandle> = (_, ref) => {
     isValid,
     isSubmitting,
     submit,
-  } = useEditModal({ ref });
+  } = useEditModal({ onEdit, ref });
 
   return (
     <Modal
@@ -47,7 +54,7 @@ const EditModal: ForwardRefRenderFunction<EditModalHandle> = (_, ref) => {
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader>Edit item</ModalHeader>
+            <ModalHeader className="md:text-[22px]">Edit item</ModalHeader>
 
             <ModalBody className="gap-5">
               <Skeleton isLoaded={!isLoading} className="rounded-lg">

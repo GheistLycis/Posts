@@ -7,6 +7,7 @@ import { GetPostRes } from 'app/api/utils/types/post/GetPostRes';
 import { PatchPostReq } from 'app/api/utils/types/post/PatchPostReq';
 import {
   ForwardedRef,
+  useCallback,
   useEffect,
   useImperativeHandle,
   useState,
@@ -17,6 +18,7 @@ import { z } from 'zod';
 import { EditModalHandle } from '../EditModal';
 
 export interface UseEditModalProps {
+  onEdit: () => void;
   ref: ForwardedRef<EditModalHandle>;
 }
 
@@ -36,8 +38,6 @@ type FormSchema = z.infer<typeof formSchema>;
 
 const MIN_CONTENT_LEN = 10;
 
-export const postEditedEvent = new Event('postEdited');
-
 const formSchema = z.object({
   title: z
     .string()
@@ -53,7 +53,10 @@ const formSchema = z.object({
     .refine(maliciousInputValidator, 'Malicious input detected!'),
 });
 
-export const useEditModal = ({ ref }: UseEditModalProps): UseEditModal => {
+export const useEditModal = ({
+  onEdit,
+  ref,
+}: UseEditModalProps): UseEditModal => {
   const [id, setId] = useState<number>();
   const { isOpen, onClose, onOpen, onOpenChange } = useDisclosure();
   const [isSubmitting, startTransition] = useTransition();
@@ -80,16 +83,19 @@ export const useEditModal = ({ ref }: UseEditModalProps): UseEditModal => {
         successToast: 'Post edited!',
         errorToast: 'Failed to edit post',
       }).then(() => {
-        document.dispatchEvent(postEditedEvent);
+        onEdit();
         onClose();
       })
     )
   );
 
-  const handleOpen = (id: number) => {
-    setId(id);
-    onOpen();
-  };
+  const handleOpen = useCallback(
+    (id: number) => {
+      setId(id);
+      onOpen();
+    },
+    [onOpen]
+  );
 
   useImperativeHandle(ref, () => ({ open: handleOpen, close: onClose }));
 
