@@ -3,6 +3,7 @@ import { handleFailedRequest } from 'app/api/utils/functions/handleFailedRequest
 import { Handler } from 'app/api/utils/types/api/Handler';
 import { GetPostRes } from 'app/api/utils/types/post/GetPostRes';
 import { NextResponse } from 'next/server';
+import { mockComments } from '../route';
 
 const API_URL = process.env.API_URL;
 const LOG_TAG = 'post/:id';
@@ -18,7 +19,11 @@ export const GET: Handler<GetPostRes, 'id'> = async (req, ctx) => {
     if (!res.ok)
       return await handleFailedRequest(res, `${req.method} - ${LOG_TAG}`);
 
-    return NextResponse.json(await res.json());
+    const resPayload: GetPostRes = await res.json();
+
+    resPayload.comments = mockComments;
+
+    return NextResponse.json(resPayload);
   } catch (error) {
     return handleBffException(error, `${req.method} - ${LOG_TAG}`);
   }

@@ -2,12 +2,15 @@
 import ConfirmationModal from '@components/ConfirmationModal/ConfirmationModal';
 import { Spinner } from '@heroui/react';
 import { FC, RefObject } from 'react';
+import CommentsDrawer from './components/CommentsDrawer/CommentsDrawer';
 import EditModal from './components/EditModal/EditModal';
 import Post from './components/Post/Post';
 import { usePostList } from './hooks/usePostList';
 
 const PostList: FC = () => {
   const {
+    isCommentsDrawerOpen,
+    setIsCommentsDrawerOpen,
     confirmationModalRef,
     editModalRef,
     hasNextPage,
@@ -17,6 +20,7 @@ const PostList: FC = () => {
     posts,
     refetch,
     scrollerRef,
+    handleViewComments,
   } = usePostList();
 
   return (
@@ -26,6 +30,11 @@ const PostList: FC = () => {
       <ConfirmationModal
         ref={confirmationModalRef}
         onConfirm={handleDelete as never}
+      />
+
+      <CommentsDrawer
+        isOpen={isCommentsDrawerOpen}
+        setIsOpen={setIsCommentsDrawerOpen}
       />
 
       <div className="flex flex-col gap-2">
@@ -42,9 +51,10 @@ const PostList: FC = () => {
           {posts.map((post) => (
             <Post
               key={post.id}
-              onDelete={(id) => confirmationModalRef.current?.open(id)}
-              onEdit={(id) => editModalRef.current?.open(id)}
               post={post}
+              onDelete={() => confirmationModalRef.current?.open(post.id)}
+              onEdit={() => editModalRef.current?.open(post.id)}
+              onViewComments={() => handleViewComments(post.id)}
             />
           ))}
 

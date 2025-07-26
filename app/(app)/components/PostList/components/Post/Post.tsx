@@ -1,20 +1,22 @@
 'use client';
 import { Tooltip } from '@heroui/react';
-import { ListPostRes } from 'app/api/utils/types/post/ListPostRes';
+import { GetPostRes } from 'app/api/utils/types/post/GetPostRes';
 import { FC } from 'react';
 import { AiOutlineLike } from 'react-icons/ai';
+import { FaRegComments } from 'react-icons/fa';
 import { MdDeleteForever } from 'react-icons/md';
 import { PiNotePencil } from 'react-icons/pi';
 import styles from './Post.module.css';
 import { usePost } from './hooks/usePost';
 
 interface PostProps {
-  onDelete: (id: number) => void;
-  onEdit: (id: number) => void;
-  post: ListPostRes['results'][number];
+  post: GetPostRes;
+  onDelete: () => void;
+  onEdit: () => void;
+  onViewComments: () => void;
 }
 
-const Post: FC<PostProps> = ({ onDelete, onEdit, post }) => {
+const Post: FC<PostProps> = ({ post, onDelete, onEdit, onViewComments }) => {
   const { postAge, userHasLiked, likes, toggleLike, user } = usePost({ post });
 
   return (
@@ -26,25 +28,37 @@ const Post: FC<PostProps> = ({ onDelete, onEdit, post }) => {
           </p>
         </Tooltip>
 
-        {user === post.username && (
-          <div className="flex items-center gap-4 md:gap-6">
-            <Tooltip content="Delete post">
-              <MdDeleteForever
-                size={28}
-                onClick={() => onDelete(post.id)}
-                className="cursor-pointer duration-200 outline-none hover:opacity-50"
-              />
-            </Tooltip>
+        <div className="flex items-center gap-3 md:gap-5">
+          <div className="flex gap-2">
+            {post.comments.length}
 
-            <Tooltip content="Edit post">
-              <PiNotePencil
-                size={28}
-                onClick={() => onEdit(post.id)}
-                className="cursor-pointer duration-200 outline-none hover:opacity-50"
-              />
-            </Tooltip>
+            <FaRegComments
+              size={28}
+              onClick={onViewComments}
+              className="cursor-pointer duration-200 outline-none hover:opacity-50"
+            />
           </div>
-        )}
+
+          {user === post.username && (
+            <>
+              <Tooltip content="Delete post">
+                <MdDeleteForever
+                  size={28}
+                  onClick={onDelete}
+                  className="cursor-pointer duration-200 outline-none hover:opacity-50"
+                />
+              </Tooltip>
+
+              <Tooltip content="Edit post">
+                <PiNotePencil
+                  size={28}
+                  onClick={onEdit}
+                  className="cursor-pointer duration-200 outline-none hover:opacity-50"
+                />
+              </Tooltip>
+            </>
+          )}
+        </div>
       </div>
 
       <div className="p-4">
@@ -65,7 +79,7 @@ const Post: FC<PostProps> = ({ onDelete, onEdit, post }) => {
           </div>
         </div>
 
-        <div>{post.content}</div>
+        <div className="break-words whitespace-pre-wrap">{post.content}</div>
       </div>
     </div>
   );

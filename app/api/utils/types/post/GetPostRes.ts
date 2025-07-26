@@ -5,4 +5,6 @@ export interface GetPostRes {
   created_datetime: string;
   title: string;
   content: string;
+  likes: number;
+  comments: { id: number; content: string; username: string }[];
 }

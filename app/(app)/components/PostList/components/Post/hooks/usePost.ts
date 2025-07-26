@@ -1,10 +1,10 @@
 import { useSessionContext } from '@contexts/SessionContext/useSessionContext';
 import { fetchApi } from '@utils/fetch/fetch';
-import { ListPostRes } from 'app/api/utils/types/post/ListPostRes';
+import { GetPostRes } from 'app/api/utils/types/post/GetPostRes';
 import { useCallback, useMemo, useState } from 'react';
 
 interface UsePostProps {
-  post: ListPostRes['results'][number];
+  post: GetPostRes;
 }
 
 interface UsePost {
@@ -70,5 +70,11 @@ export const usePost = ({ post }: UsePostProps): UsePost => {
     return `${value} ${unit}${value !== 1 ? 's' : ''} ago`;
   }, [post]);
 
-  return { likes, userHasLiked, toggleLike, user: user?.name, postAge };
+  return {
+    likes,
+    userHasLiked,
+    toggleLike,
+    user: user?.name,
+    postAge,
+  };
 };

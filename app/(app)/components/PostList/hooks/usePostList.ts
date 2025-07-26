@@ -3,11 +3,23 @@ import { useInfiniteScroll } from '@heroui/use-infinite-scroll';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchApi } from '@utils/fetch/fetch';
 import { ListPostRes } from 'app/api/utils/types/post/ListPostRes';
-import { RefObject, useCallback, useEffect, useRef } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  Dispatch,
+  RefObject,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { postCreatedEvent } from '../../NewPost/hooks/useNewPost';
+import { commentsDrawerQuery } from '../components/CommentsDrawer/hooks/useCommentsDrawer';
 import { EditModalHandle } from '../components/EditModal/EditModal';
 
 interface UsePostList {
+  isCommentsDrawerOpen: boolean;
+  setIsCommentsDrawerOpen: Dispatch<SetStateAction<boolean>>;
   confirmationModalRef: RefObject<ConfirmationModalHandle | null>;
   editModalRef: RefObject<EditModalHandle | null>;
   handleDelete: (id: number) => void;
@@ -17,13 +29,21 @@ interface UsePostList {
   posts: ListPostRes['results'];
   refetch: () => void;
   scrollerRef: RefObject<HTMLElement>;
+  handleViewComments: (id: number) => void;
 }
 
 const PAGE_SIZE = 5;
 
 export const usePostList = (): UsePostList => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const confirmationModalRef = useRef<ConfirmationModalHandle>(null);
   const editModalRef = useRef<EditModalHandle>(null);
+
+  const [isCommentsDrawerOpen, setIsCommentsDrawerOpen] = useState(
+    searchParams.has(commentsDrawerQuery)
+  );
 
   const { data, hasNextPage, isLoading, fetchNextPage, refetch } =
     useInfiniteQuery({
@@ -58,6 +78,16 @@ export const usePostList = (): UsePostList => {
     [refetch]
   );
 
+  const handleViewComments = useCallback(
+    (id: number) => {
+      const updatedURLParams = new URLSearchParams(searchParams);
+
+      updatedURLParams.set(commentsDrawerQuery, id.toString());
+      router.push(`${pathname}?${updatedURLParams}`);
+    },
+    [searchParams, router, pathname]
+  );
+
   useEffect(() => {
     const onPostsChange = () => refetch();
 
@@ -67,7 +97,23 @@ export const usePostList = (): UsePostList => {
       document.removeEventListener(postCreatedEvent.type, onPostsChange);
   }, [refetch]);
 
+  // * making state shareable by link
+  useEffect(() => {
+    setIsCommentsDrawerOpen(searchParams.has(commentsDrawerQuery));
+  }, [searchParams.has(commentsDrawerQuery)]);
+
+  useEffect(() => {
+    if (!isCommentsDrawerOpen) {
+      const updatedURLParams = new URLSearchParams(searchParams);
+
+      updatedURLParams.delete(commentsDrawerQuery);
+      router.push(`${pathname}?${updatedURLParams}`);
+    }
+  }, [isCommentsDrawerOpen]);
+
   return {
+    isCommentsDrawerOpen,
+    setIsCommentsDrawerOpen,
     confirmationModalRef,
     editModalRef,
     hasNextPage,
@@ -77,5 +123,6 @@ export const usePostList = (): UsePostList => {
     posts,
     refetch,
     scrollerRef,
+    handleViewComments,
   };
 };
