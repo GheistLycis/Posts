@@ -10,7 +10,7 @@ const LOG_TAG = 'post';
 
 export const GET: Handler<ListPostRes> = async (req) => {
   try {
-    const res = await fetch(`${API_URL}/`, {
+    const res = await fetch(`${API_URL}/${req.nextUrl.search}`, {
       headers: { 'Content-Type': 'application/json' },
       cache: 'no-cache',
     });

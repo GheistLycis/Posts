@@ -1,56 +1,52 @@
 import { useInfiniteScroll } from '@heroui/use-infinite-scroll';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { fetchApi } from '@utils/fetch/fetch';
 import { ListPostRes } from 'app/api/utils/types/post/ListPostRes';
-import { RefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import { RefObject, useEffect } from 'react';
 import { postCreatedEvent } from '../../NewPost/hooks/useNewPost';
 
 interface UsePostList {
-  hasMore: boolean;
+  hasNextPage: boolean;
   isLoading: boolean;
   loaderRef: RefObject<HTMLElement>;
   posts: ListPostRes['results'];
-  refreshList: () => void;
+  refetch: () => void;
   scrollerRef: RefObject<HTMLElement>;
 }
 
 const PAGE_SIZE = 5;
 
 export const usePostList = (): UsePostList => {
-  const [page, setPage] = useState(0);
-  const { data, refetch, isLoading } = useQuery({
-    queryFn: () => fetchApi<ListPostRes>('/api/post'),
-    queryKey: ['posts'],
-  });
+  const { data, hasNextPage, isLoading, fetchNextPage, refetch } =
+    useInfiniteQuery({
+      queryFn: ({ pageParam }) =>
+        fetchApi<ListPostRes>(
+          `/api/post?limit=${PAGE_SIZE}&offset=${pageParam}`
+        ),
+      queryKey: ['posts'],
+      initialPageParam: 0,
+      getNextPageParam: ({ next }) => {
+        const offSet = next?.match(/[?&]offset=(\d+)/);
 
-  const posts = useMemo(
-    () => data?.results.slice(0, (page + 1) * PAGE_SIZE) ?? [],
-    [data, page]
-  );
+        return offSet ? +offSet[1] : undefined;
+      },
+    });
 
-  const hasMore = useMemo(
-    () => posts.length < (data?.results.length ?? 0),
-    [posts, data]
-  );
+  const posts = data?.pages.flatMap(({ results }) => results) ?? [];
 
   const [loaderRef, scrollerRef] = useInfiniteScroll({
-    hasMore,
-    onLoadMore: () => setTimeout(() => setPage(page + 1), 500), // * mocking API delay
+    hasMore: hasNextPage,
+    onLoadMore: fetchNextPage,
   });
 
-  const refreshList = useCallback(() => {
-    setPage(0);
-    refetch();
-  }, [setPage, refetch]);
-
   useEffect(() => {
-    const onPostCreated = () => refreshList();
+    const onPostCreated = () => refetch();
 
     document.addEventListener(postCreatedEvent.type, onPostCreated);
 
     return () =>
       document.removeEventListener(postCreatedEvent.type, onPostCreated);
-  }, [refreshList]);
+  }, [refetch]);
 
-  return { hasMore, isLoading, loaderRef, posts, refreshList, scrollerRef };
+  return { hasNextPage, isLoading, loaderRef, posts, refetch, scrollerRef };
 };

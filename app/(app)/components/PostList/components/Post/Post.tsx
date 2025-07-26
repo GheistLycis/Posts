@@ -56,6 +56,7 @@ const Post: FC<PostProps> = ({
         )}
       </div>
 
+      {/* TODO: toggle-collapse + motion */}
       <div className="p-4">
         <div className="text-subtitle mb-2 flex justify-between gap-2 md:text-[18px]">
           <p className="max-w-[40ch] truncate">@{post.username}</p>

@@ -1,7 +1,7 @@
 export interface ListPostRes {
   count: number;
-  next: null;
-  previous: null;
+  next: string | null;
+  previous: string | null;
   results: Post[];
 }
 
