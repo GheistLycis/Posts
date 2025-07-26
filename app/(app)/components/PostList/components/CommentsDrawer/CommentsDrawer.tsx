@@ -49,7 +49,11 @@ const CommentsDrawer: FC<CommentsDrawerProps> = ({ isOpen, setIsOpen }) => {
               <Spinner size="lg" />
             ) : post?.comments.length ? (
               post?.comments.map((comment) => (
-                <Comment key={comment.id} comment={comment} />
+                <Comment
+                  key={comment.id}
+                  author={post.username}
+                  comment={comment}
+                />
               ))
             ) : (
               <p className="text-subtitle self-center italic md:text-lg">
