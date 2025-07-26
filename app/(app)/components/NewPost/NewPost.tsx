@@ -11,7 +11,7 @@ const NewPost: FC = () => {
 
   return (
     <section className="border-gray flex w-full max-w-[752px] flex-col gap-4 rounded-2xl border p-4">
-      <h2 className="font-bold">What&apos;s on your mind?</h2>
+      <h2 className="font-bold md:text-[22px]">What&apos;s on your mind?</h2>
 
       <Controller
         control={control}
@@ -61,7 +61,7 @@ const NewPost: FC = () => {
         )}
       />
 
-      <div className="flex justify-end">
+      <div className="mt-2 flex justify-end">
         <Button
           onPress={submit}
           isDisabled={!isValid}

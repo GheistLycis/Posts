@@ -2,7 +2,8 @@ import { useInfiniteScroll } from '@heroui/use-infinite-scroll';
 import { useQuery } from '@tanstack/react-query';
 import { fetchApi } from '@utils/fetch/fetch';
 import { ListPostRes } from 'app/api/utils/types/post/ListPostRes';
-import { RefObject, useCallback, useMemo, useState } from 'react';
+import { RefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import { postCreatedEvent } from '../../NewPost/hooks/useNewPost';
 
 interface UsePostList {
   hasMore: boolean;
@@ -34,13 +35,22 @@ export const usePostList = (): UsePostList => {
 
   const [loaderRef, scrollerRef] = useInfiniteScroll({
     hasMore,
-    onLoadMore: () => setPage(page + 1),
+    onLoadMore: () => setTimeout(() => setPage(page + 1), 500), // * mocking API delay
   });
 
   const refreshList = useCallback(() => {
     setPage(0);
     refetch();
   }, [setPage, refetch]);
+
+  useEffect(() => {
+    const onPostCreated = () => refreshList();
+
+    document.addEventListener(postCreatedEvent.type, onPostCreated);
+
+    return () =>
+      document.removeEventListener(postCreatedEvent.type, onPostCreated);
+  }, [refreshList]);
 
   return { hasMore, isLoading, loaderRef, posts, refreshList, scrollerRef };
 };

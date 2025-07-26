@@ -11,7 +11,7 @@ const PostList: FC = () => {
   return (
     <div
       ref={scrollerRef as RefObject<HTMLDivElement>}
-      className="flex flex-col gap-2"
+      className="flex max-h-full flex-col gap-2"
     >
       {!posts.length && !isLoading && (
         <p className="text-subtitle self-center text-lg italic">
@@ -19,11 +19,19 @@ const PostList: FC = () => {
         </p>
       )}
 
-      {posts.map((post) => (
-        <Post key={post.id} onUpdate={refreshList} post={post} />
-      ))}
+      <div className="flex flex-col gap-4">
+        {posts.map((post) => (
+          <Post
+            key={post.id}
+            confirmationModalRef={undefined}
+            editModalRef={undefined}
+            onUpdate={refreshList}
+            post={post}
+          />
+        ))}
 
-      {(isLoading || hasMore) && <Spinner ref={loaderRef} size="lg" />}
+        {(isLoading || hasMore) && <Spinner ref={loaderRef} size="lg" />}
+      </div>
     </div>
   );
 };

@@ -20,6 +20,8 @@ type FormSchema = z.infer<typeof formSchema>;
 
 const MIN_CONTENT_LEN = 10;
 
+export const postCreatedEvent = new Event('postCreated');
+
 const formSchema = z.object({
   title: z
     .string()
@@ -54,7 +56,10 @@ export const useNewPost = (): UseNewPost => {
         body: { title, content, username: user!.name },
         successToast: 'Post created!',
         errorToast: 'Failed to create post',
-      }).then(() => reset())
+      }).then(() => {
+        document.dispatchEvent(postCreatedEvent);
+        reset();
+      })
     )
   );
 
