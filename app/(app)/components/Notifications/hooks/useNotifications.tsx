@@ -1,13 +1,26 @@
+import { useIsMobile } from '@utils/useIsMobile/useIsMobile';
 import { Notification } from 'app/api/utils/types/notification/Notification';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface UseNotifications {
   notifications: Notification[];
+  unseenNotifications: Set<string>;
+  handleOpenChange: (isOpen: boolean) => void;
+  isMobile: boolean;
 }
 
 export const useNotifications = (): UseNotifications => {
+  const isMobile = useIsMobile();
   const [userHasInteracted, setUserHasInteracted] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [unseenNotifications, setUnseenNotifications] = useState<
+    Set<Notification['created_at']>
+  >(new Set());
+
+  const handleOpenChange = useCallback(
+    (isOpen: boolean) => isOpen && setUnseenNotifications(new Set()),
+    []
+  );
 
   useEffect(() => {
     const enableNotifications = () => {
@@ -26,7 +39,10 @@ export const useNotifications = (): UseNotifications => {
     const eventSource = new EventSource('/api/notification');
 
     eventSource.onmessage = (event) => {
-      setNotifications((v) => [...v, JSON.parse(event.data)]);
+      const newNotification = JSON.parse(event.data);
+
+      setNotifications((v) => [...v, newNotification]);
+      setUnseenNotifications((v) => new Set(v).add(newNotification));
       new Audio('/notification.wav').play();
     };
     eventSource.onerror = (err) => {
@@ -37,5 +53,5 @@ export const useNotifications = (): UseNotifications => {
     return () => eventSource.close();
   }, [userHasInteracted]);
 
-  return { notifications };
+  return { isMobile, notifications, unseenNotifications, handleOpenChange };
 };
