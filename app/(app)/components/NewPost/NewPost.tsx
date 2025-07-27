@@ -1,13 +1,16 @@
 'use client';
+import { FILE } from '@constants/file';
 import { Button, Input, Textarea } from '@heroui/react';
 import { FC } from 'react';
 import { Controller } from 'react-hook-form';
+import { MdDelete, MdFileUpload } from 'react-icons/md';
 import { useNewPost } from './hooks/useNewPost';
 
 const MAX_CONTENT_LEN = 3000;
 
 const NewPost: FC = () => {
-  const { control, errors, isLoading, isValid, submit } = useNewPost();
+  const { uploadInputRef, control, errors, isLoading, isValid, submit } =
+    useNewPost();
 
   return (
     <section className="border-gray flex w-full max-w-[752px] flex-col gap-4 rounded-2xl border p-4">
@@ -58,6 +61,51 @@ const NewPost: FC = () => {
               label: 'text-sm md:text-base',
             }}
           />
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="file"
+        render={({ field }) => (
+          <div className="flex flex-col gap-1">
+            <Input
+              ref={uploadInputRef}
+              type="file"
+              onChange={(file) =>
+                file.target.files && field.onChange(file.target.files[0])
+              }
+              accept={Object.keys(FILE.ACCEPTED_TYPES).join(',')}
+              className="hidden"
+            />
+
+            <div
+              onClick={() => !field.value && uploadInputRef.current?.click()}
+              className={`border-gray flex items-center justify-between rounded-lg border px-4 py-2 ${field.value ? '' : 'cursor-pointer duration-200 hover:opacity-50'}`}
+            >
+              <p className="text-subtitle max-w-[60ch] truncate text-sm">
+                {field.value
+                  ? field.value.name
+                  : `Attach media (max ${FILE.MAX_SIZE_MB} MB)`}
+              </p>
+
+              {field.value ? (
+                <MdDelete
+                  onClick={() => field.onChange(undefined)}
+                  size={24}
+                  className="text-red cursor-pointer duration-200 hover:opacity-50"
+                />
+              ) : (
+                <MdFileUpload size={24} className="text-primary" />
+              )}
+            </div>
+
+            {errors[field.name] && (
+              <p className="text-red pl-2 text-sm">
+                {errors[field.name]!.message}
+              </p>
+            )}
+          </div>
         )}
       />
 

@@ -2,6 +2,7 @@ import { handleBffException } from 'app/api/utils/functions/handleBffException';
 import { Handler } from 'app/api/utils/types/api/Handler';
 import { NextResponse } from 'next/server';
 import { handleFailedRequest } from '../utils/functions/handleFailedRequest';
+import { CreatePostReq } from '../utils/types/post/CreatePostReq';
 import { CreatePostRes } from '../utils/types/post/CreatePostRes';
 import { GetPostRes } from '../utils/types/post/GetPostRes';
 import { ListPostRes } from '../utils/types/post/ListPostRes';
@@ -63,10 +64,13 @@ export const GET: Handler<ListPostRes> = async (req) => {
 
 export const POST: Handler<CreatePostRes> = async (req) => {
   try {
-    const body = await req.json();
+    const body: CreatePostReq = await req.json();
     const res = await fetch(`${API_URL}/`, {
       method: req.method,
-      body: JSON.stringify(body),
+      body: JSON.stringify({
+        ...body,
+        username: req.cookies.get('user')?.value ?? '',
+      }),
       headers: { 'Content-Type': 'application/json' },
     });
 

@@ -12,7 +12,7 @@ const Notifications: FC = () => {
       <Badge
         content={notifications.length < 100 ? notifications.length : '99+'}
         variant="faded"
-        color="primary"
+        color="danger"
       >
         <PopoverTrigger>
           <MdNotifications

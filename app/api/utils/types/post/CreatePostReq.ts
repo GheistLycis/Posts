@@ -1,5 +1,6 @@
 export interface CreatePostReq {
-  username: string;
   title: string;
   content: string;
+  /** ISO datetime */
+  file?: string;
 }
