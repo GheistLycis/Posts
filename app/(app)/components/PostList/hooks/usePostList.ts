@@ -83,7 +83,7 @@ export const usePostList = (): UsePostList => {
       const updatedURLParams = new URLSearchParams(searchParams);
 
       updatedURLParams.set(commentsDrawerQuery, id.toString());
-      router.push(`${pathname}?${updatedURLParams}`);
+      router.push(`${pathname}?${updatedURLParams}`, { scroll: false });
     },
     [searchParams, router, pathname]
   );

@@ -19,7 +19,8 @@ interface CommentsDrawerProps {
 }
 
 const CommentModal = dynamic(
-  () => import('./components/CommentModal/CommentModal')
+  () => import('./components/CommentModal/CommentModal'),
+  { ssr: false }
 );
 
 const CommentsDrawer: FC<CommentsDrawerProps> = ({ isOpen, setIsOpen }) => {
