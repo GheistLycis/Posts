@@ -31,14 +31,14 @@ export const fetchApi = async <TRes = unknown, TBody = undefined>(
     });
     const data: unknown = await res.json();
 
-    if (res.ok) {
-      if (successToast) toast.success({ message: successToast });
+    if (!res.ok) {
+      handleErrorMessage(res.status, data as BffErrorPayload, errorToast);
 
-      return data as TRes;
+      return Promise.reject(data);
     }
-    handleErrorMessage(res.status, data as BffErrorPayload, errorToast);
+    if (successToast) toast.success({ message: successToast });
 
-    return Promise.reject(data);
+    return data as TRes;
   } catch (error) {
     if (errorToast) toast.error({ message: errorToast });
 
