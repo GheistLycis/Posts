@@ -85,11 +85,7 @@ export const useNewPost = (): UseNewPost => {
 
       return fetchApi<CreatePostRes, CreatePostReq>('/api/post', {
         method: 'POST',
-        body: {
-          title,
-          content,
-          file: base64,
-        },
+        body: { title, content, file: base64 },
         successToast: 'Post created!',
         errorToast: 'Failed to create post',
       }).then(() => {

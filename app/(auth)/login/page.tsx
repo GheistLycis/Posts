@@ -11,7 +11,7 @@ const Login: FC = () => {
     <main>
       <div className="bg-background flex w-[280px] flex-col gap-2 rounded-2xl border border-[#CCC] p-4 md:w-[500px]">
         <h2 className="mb-2 font-bold md:text-[22px]">
-          Welcome to CodeLeap network!
+          Welcome to Posts network!
         </h2>
 
         <Controller

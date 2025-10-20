@@ -7,7 +7,7 @@ const Home: FC = () => (
   <main className="bg-background flex w-full max-w-[800px] flex-col items-center gap-6">
     {/* TODO: move to layout? */}
     <div className="bg-primary fixed z-50 flex h-20 w-[100vw] max-w-[800px] content-center items-center justify-between px-6 font-bold text-white md:text-[22px]">
-      <p>CodeLeap Network</p>
+      <p>Posts Network</p>
 
       <Notifications />
     </div>

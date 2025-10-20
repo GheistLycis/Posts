@@ -8,7 +8,7 @@ export const GET = () => {
   const stream = new ReadableStream({
     start: (controller) => {
       const notification: Notification = {
-        title: 'Hello CodeLeap!',
+        title: 'Hello Posts!',
         message:
           "Hope you like the result. It was a really fun project to do! Although I'm not too creative, this is a little plus I thought to add to the project.",
         created_at: new Date().toISOString(),
